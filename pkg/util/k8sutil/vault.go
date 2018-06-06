@@ -54,6 +54,9 @@ const (
 	exporterStatsdPort = 9125
 	exporterPromPort   = 9102
 	exporterImage      = "prom/statsd-exporter:v0.5.0"
+
+	vaultExporterPort  = 9410
+	vaultExporterImage = "grapeshot/vault_exporter:v0.1.0"
 )
 
 // EtcdClientTLSSecretName returns the name of etcd client TLS secret for the given vault name
@@ -227,6 +230,18 @@ func statsdExporterContainer() v1.Container {
 	}
 }
 
+func vaultExporterContainer() v1.Container {
+	return v1.Container{
+		Name:  "vault-exporter",
+		Image: vaultExporterImage,
+		Ports: []v1.ContainerPort{{
+			Name:          "exporter",
+			ContainerPort: vaultExporterPort,
+			Protocol:      "TPC",
+		}},
+	}
+}
+
 // DeployVault deploys a vault service.
 // DeployVault is a multi-steps process. It creates the deployment, the service and
 // other related Kubernetes objects for Vault. Any intermediate step can fail.
@@ -242,7 +257,7 @@ func DeployVault(kubecli kubernetes.Interface, v *api.VaultService) error {
 			Labels: selector,
 		},
 		Spec: v1.PodSpec{
-			Containers: []v1.Container{vaultContainer(v), statsdExporterContainer()},
+			Containers: []v1.Container{vaultContainer(v), statsdExporterContainer(), vaultExporterContainer()},
 			Volumes: []v1.Volume{{
 				Name: vaultConfigVolName,
 				VolumeSource: v1.VolumeSource{
