@@ -237,7 +237,7 @@ func vaultExporterContainer() v1.Container {
 		Ports: []v1.ContainerPort{{
 			Name:          "exporter",
 			ContainerPort: vaultExporterPort,
-			Protocol:      "TPC",
+			Protocol:      "TCP",
 		}},
 	}
 }
