@@ -153,7 +153,7 @@ func vaultContainer(v *api.VaultService) v1.Container {
 			"server",
 			"-config=" + VaultConfigPath,
 		},
-		Env: []v1.EnvVar{
+		Env: append([]v1.EnvVar{
 			{
 				Name:  evnVaultRedirectAddr,
 				Value: VaultServiceURL(v.GetName(), v.GetNamespace(), VaultClientPort),
@@ -162,7 +162,7 @@ func vaultContainer(v *api.VaultService) v1.Container {
 				Name:  evnVaultClusterAddr,
 				Value: VaultServiceURL(v.GetName(), v.GetNamespace(), vaultClusterPort),
 			},
-		},
+		}, v.Spec.ExtraEnv...),
 		VolumeMounts: []v1.VolumeMount{{
 			Name:      vaultConfigVolName,
 			MountPath: filepath.Dir(VaultConfigPath),

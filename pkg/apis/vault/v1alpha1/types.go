@@ -61,6 +61,9 @@ type VaultServiceSpec struct {
 	// Version of Vault to be deployed.
 	Version string `json:"version"`
 
+	// List of extra environment variables which will be added to Vault container.
+	ExtraEnv []v1.EnvVar `json:"extraEnv"`
+
 	// Pod defines the policy for pods owned by vault operator.
 	// This field cannot be updated once the CR is created.
 	Pod *PodPolicy `json:"pod,omitempty"`
