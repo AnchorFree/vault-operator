@@ -145,14 +145,18 @@ func DeleteEtcdCluster(etcdCRCli etcdCRClient.Interface, v *api.VaultService) er
 }
 
 func vaultContainer(v *api.VaultService) v1.Container {
+	command := []string{
+		"/bin/vault",
+		"server",
+		"-config=" + VaultConfigPath}
+	if len(v.Spec.Command) != 0 {
+		command = v.Spec.Command
+	}
+
 	return v1.Container{
-		Name:  "vault",
-		Image: fmt.Sprintf("%s:%s", v.Spec.BaseImage, v.Spec.Version),
-		Command: []string{
-			"/bin/vault",
-			"server",
-			"-config=" + VaultConfigPath,
-		},
+		Name:    "vault",
+		Image:   fmt.Sprintf("%s:%s", v.Spec.BaseImage, v.Spec.Version),
+		Command: command,
 		Env: append([]v1.EnvVar{
 			{
 				Name:  evnVaultRedirectAddr,

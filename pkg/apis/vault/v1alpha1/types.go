@@ -61,6 +61,9 @@ type VaultServiceSpec struct {
 	// Version of Vault to be deployed.
 	Version string `json:"version"`
 
+	// Overwrite vault container command
+	Command []string `json:"command,omitempty`
+
 	// List of extra environment variables which will be added to Vault container.
 	ExtraEnv []v1.EnvVar `json:"extraEnv"`
 
