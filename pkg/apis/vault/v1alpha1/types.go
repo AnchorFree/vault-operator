@@ -86,7 +86,7 @@ type PodPolicy struct {
 	// Resources is the resource requirements for the containers.
 	Resources    v1.ResourceRequirements `json:"resources,omitempty"`
 	Affinity     v1.Affinity             `json:"affinity,omitempty"`
-	NodeSelector v1.NodeSelector         `json:"nodeSelector,omitempty"`
+	NodeSelector map[string]string       `json:"nodeSelector,omitempty"`
 }
 
 // SetDefaults sets the default vaules for the vault spec and returns true if the spec was changed

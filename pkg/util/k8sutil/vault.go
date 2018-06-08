@@ -277,6 +277,12 @@ func DeployVault(kubecli kubernetes.Interface, v *api.VaultService) error {
 	if v.Spec.Pod != nil {
 		applyPodPolicy(&podTempl.Spec, v.Spec.Pod)
 	}
+	if v.Spec.Pod.Affinity != nil {
+		podTempl.Spec.Affinity = &v.Spec.Pod.Affinity
+	}
+	if v.Spec.Pod.NodeSelector != nil {
+		podTempl.Spec.NodeSelector = v.Spec.Pod.NodeSelector
+	}
 
 	configEtcdBackendTLS(&podTempl, v)
 	configVaultServerTLS(&podTempl, v)
