@@ -62,7 +62,7 @@ type VaultServiceSpec struct {
 	Version string `json:"version"`
 
 	// Overwrite vault container command
-	Command []string `json:"command,omitempty`
+	Command []string `json:"command,omitempty"`
 
 	// List of extra environment variables which will be added to Vault container.
 	ExtraEnv []v1.EnvVar `json:"extraEnv"`
@@ -84,7 +84,9 @@ type VaultServiceSpec struct {
 // PodPolicy defines the policy for pods owned by vault operator.
 type PodPolicy struct {
 	// Resources is the resource requirements for the containers.
-	Resources v1.ResourceRequirements `json:"resources,omitempty"`
+	Resources    v1.ResourceRequirements `json:"resources,omitempty"`
+	Affinity     v1.Affinity             `json:"affinity,omitempty"`
+	NodeSelector v1.NodeSelector         `json:"nodeSelector,omitempty"`
 }
 
 // SetDefaults sets the default vaules for the vault spec and returns true if the spec was changed

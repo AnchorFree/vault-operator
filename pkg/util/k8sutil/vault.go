@@ -328,6 +328,11 @@ func DeployVault(kubecli kubernetes.Interface, v *api.VaultService) error {
 					Protocol: v1.ProtocolTCP,
 					Port:     exporterPromPort,
 				},
+				{
+					Name:     "exporter",
+					Protocol: v1.ProtocolTCP,
+					Port:     vaultExporterPort,
+				},
 			},
 		},
 	}
