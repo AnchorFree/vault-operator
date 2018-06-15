@@ -238,6 +238,12 @@ func vaultExporterContainer() v1.Container {
 	return v1.Container{
 		Name:  "vault-exporter",
 		Image: vaultExporterImage,
+		Env: []v1.EnvVar{
+			{
+				Name:  "VAULT_SKIP_VERIFY",
+				Value: "true",
+			},
+		},
 		Ports: []v1.ContainerPort{{
 			Name:          "exporter",
 			ContainerPort: vaultExporterPort,
