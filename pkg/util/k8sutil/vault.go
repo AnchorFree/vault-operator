@@ -57,6 +57,8 @@ const (
 
 	vaultExporterPort  = 9410
 	vaultExporterImage = "grapeshot/vault_exporter:v0.1.1"
+
+	syslogSidecarImage = "whereisaaron/kube-syslog-sidecar"
 )
 
 // EtcdClientTLSSecretName returns the name of etcd client TLS secret for the given vault name
@@ -252,6 +254,13 @@ func vaultExporterContainer() v1.Container {
 	}
 }
 
+func syslogSidecarContainer() v1.Container {
+	return v1.Container{
+		Name:  "syslog-sidecar",
+		Image: syslogSidecarImage,
+	}
+}
+
 // DeployVault deploys a vault service.
 // DeployVault is a multi-steps process. It creates the deployment, the service and
 // other related Kubernetes objects for Vault. Any intermediate step can fail.
@@ -267,7 +276,7 @@ func DeployVault(kubecli kubernetes.Interface, v *api.VaultService) error {
 			Labels: selector,
 		},
 		Spec: v1.PodSpec{
-			Containers: []v1.Container{vaultContainer(v), statsdExporterContainer(), vaultExporterContainer()},
+			Containers: []v1.Container{vaultContainer(v), statsdExporterContainer(), vaultExporterContainer(), syslogSidecarContainer()},
 			Volumes: []v1.Volume{{
 				Name: vaultConfigVolName,
 				VolumeSource: v1.VolumeSource{
