@@ -77,6 +77,10 @@ type VaultServiceSpec struct {
 	// the "storage", "listener" sections in orignal config.
 	ConfigMapName string `json:"configMapName"`
 
+	// List of extra configuration arameters for listerer block
+	// This list will be added after vault-operator configation
+	ExtraListener []string `json:"ExtraListener,omitempty"`
+
 	// TLS policy of vault nodes
 	TLS *TLSPolicy `json:"TLS,omitempty"`
 }

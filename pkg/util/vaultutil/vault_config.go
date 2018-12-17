@@ -18,6 +18,7 @@ import (
 	"bytes"
 	"fmt"
 	"path/filepath"
+	"strings"
 
 	vaultapi "github.com/hashicorp/vault/api"
 )
@@ -37,6 +38,7 @@ listener "tcp" {
   cluster_address = "0.0.0.0:8201"
   tls_cert_file = "%s"
   tls_key_file  = "%s"
+%s
 }
 `
 
@@ -55,7 +57,7 @@ storage "etcd" {
 // NewConfigWithDefaultParams appends to given config data some default params:
 // - telemetry setting
 // - tcp listener
-func NewConfigWithDefaultParams(data string) string {
+func NewConfigWithDefaultParams(data string, extraListener []string) string {
 	buf := bytes.NewBufferString(data)
 	buf.WriteString(`
 telemetry {
@@ -63,9 +65,15 @@ telemetry {
 }
 `)
 
+	el := ""
+	if len(extraListener) != 0 {
+		el = strings.Join(extraListener, "/n")
+	}
+
 	listenerSection := fmt.Sprintf(listenerFmt,
 		filepath.Join(VaultTLSAssetDir, ServerTLSCertName),
-		filepath.Join(VaultTLSAssetDir, ServerTLSKeyName))
+		filepath.Join(VaultTLSAssetDir, ServerTLSKeyName),
+		el)
 	buf.WriteString(listenerSection)
 
 	return buf.String()
