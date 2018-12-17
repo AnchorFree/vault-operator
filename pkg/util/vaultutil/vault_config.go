@@ -60,6 +60,8 @@ storage "etcd" {
 func NewConfigWithDefaultParams(data string, extraListener []string) string {
 	buf := bytes.NewBufferString(data)
 	buf.WriteString(`
+ui = true
+
 telemetry {
 	statsd_address = "localhost:9125"
 }
